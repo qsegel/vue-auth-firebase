@@ -20,7 +20,28 @@ export default createStore({
     },
   },
   actions: {
-    // async login({ commit }, details) {},
+    async login({ commit }, details) {
+      const { email, password } = details;
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+      } catch (error) {
+        switch (error.code) {
+          case 'auth/user-not-found':
+            alert('user not found');
+            break;
+          case 'auth/wrong-password':
+            alert('Wrong password');
+            break;
+          default:
+            alert('Something went wrong');
+        }
+        return;
+      }
+
+      commit('SET_USER', auth.currentUser);
+      router.push('/');
+    },
     // async register({ commit }, details) {},
     // async logout({ commit }) {},
   },
