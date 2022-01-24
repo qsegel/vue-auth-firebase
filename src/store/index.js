@@ -42,7 +42,34 @@ export default createStore({
       commit('SET_USER', auth.currentUser);
       router.push('/');
     },
-    // async register({ commit }, details) {},
+    async register({ commit }, details) {
+      const { email, password } = details;
+
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+      } catch (error) {
+        switch (error.code) {
+          case 'auth/email-already-in-use':
+            alert('email already in use');
+            break;
+          case 'auth/invalid-email':
+            alert('invalid email');
+            break;
+          case 'auth/operation-not-allowed':
+            alert('Operation not allowed');
+            break;
+          case 'auth/weak-password':
+            alert('Weak password');
+            break;
+          default:
+            alert('Something went wrong');
+        }
+        return;
+      }
+
+      commit('SET_USER', auth.currentUser);
+      router.push('/');
+    },
     // async logout({ commit }) {},
   },
 });
