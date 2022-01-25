@@ -70,6 +70,11 @@ export default createStore({
       commit('SET_USER', auth.currentUser);
       router.push('/');
     },
-    // async logout({ commit }) {},
+    async logout({ commit }) {
+      await signOut(auth);
+
+      commit('CLEAR_USER');
+      router.push('/login');
+    },
   },
 });
